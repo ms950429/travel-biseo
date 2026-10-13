@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>여행비서</title>
+  <meta name="description" content="여행 준비사항을 미리 알려주고, 하나씩 완료할 수 있도록 도와주는 개인화 체크리스트 서비스">
+  <style>
+    :root {
+      --navy: #193656;
+      --teal: #26b3a0;
+      --sky-top: #cfe7fb;
+      --sky-bottom: #f4faff;
+      --text: #34425c;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 100%);
+      color: var(--text);
+      font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif;
+      line-height: 1.6;
+    }
+    main { width: 100%; max-width: 420px; }
+    .slogan { margin: 0 0 8px; font-size: 1rem; font-weight: 600; color: var(--navy); }
+    .logo { margin: 0; font-size: 3.25rem; font-weight: 800; letter-spacing: -0.02em; color: var(--navy); }
+    .logo span { color: var(--teal); }
+    .desc { margin: 20px 0 0; font-size: 0.95rem; }
+    .status {
+      display: inline-block;
+      margin-top: 28px;
+      padding: 10px 16px;
+      border: 2px solid var(--teal);
+      border-radius: 999px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--navy);
+      background: #fff;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="slogan">여행 준비, 필요한 순간에 챙겨주는 비서</p>
+    <h1 class="logo">여행<span>비서</span></h1>
+    <p class="desc">여행 준비사항을 미리 알려주고,<br>하나씩 완료할 수 있도록 도와주는<br>개인화 체크리스트 서비스</p>
+    <p class="status">서비스를 준비하고 있어요</p>
+  </main>
+</body>
+</html>
