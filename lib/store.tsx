@@ -3,7 +3,8 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { useAuth } from './auth';
 import { usePopup } from '@/components/Popup';
 import { MSG } from './messages';
-import { today as getToday } from './dates';
+import { today as getToday, setTodayOverride } from './dates';
+import { DEMO_TODAY } from './repo/demo';
 import { alertItemIds, tripAlertCounts } from './logic';
 import type { Item, ItemPatch, NewItem, NewTrip, Settings, Trip, TripPatch } from './types';
 
@@ -27,6 +28,8 @@ type Store = {
   /** 상단 알림이 노출될 때 (같은 사용자·여행·날짜 기준 하루 1회만 기록) */
   noteReminderExposed: (tripId: string, items: Item[]) => void;
   noteReminderClicked: (tripId: string) => void;
+  /** 데모 모드 전용: 오늘 날짜를 바꾼다. null이면 실제 오늘로 되돌린다. */
+  setDemoToday: (date: string | null) => void;
 };
 const Ctx = createContext<Store | null>(null);
 
@@ -254,12 +257,23 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     [track],
   );
 
+  const setDemoToday = useCallback(
+    (date: string | null) => {
+      if (mode !== 'demo') return; // 실서비스(Supabase) 모드에서는 날짜를 바꿀 수 없다
+      if (date && /^\d{4}-\d{2}-\d{2}$/.test(date)) localStorage.setItem(DEMO_TODAY, date);
+      else localStorage.removeItem(DEMO_TODAY);
+      setTodayOverride(date);
+      setToday(getToday());
+    },
+    [mode],
+  );
+
   const value = useMemo<Store>(
     () => ({
       ready, today, trips, items, settings, itemsOf, reload, createTrip, updateTrip, deleteTrip, toggleItem, saveItem,
-      addItem, deleteItem, setAlertsEnabled, track, noteReminderExposed, noteReminderClicked,
+      addItem, deleteItem, setAlertsEnabled, track, noteReminderExposed, noteReminderClicked, setDemoToday,
     }),
-    [ready, today, trips, items, settings, itemsOf, reload, createTrip, updateTrip, deleteTrip, toggleItem, saveItem, addItem, deleteItem, setAlertsEnabled, track, noteReminderExposed, noteReminderClicked],
+    [ready, today, trips, items, settings, itemsOf, reload, createTrip, updateTrip, deleteTrip, toggleItem, saveItem, addItem, deleteItem, setAlertsEnabled, track, noteReminderExposed, noteReminderClicked, setDemoToday],
   );
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

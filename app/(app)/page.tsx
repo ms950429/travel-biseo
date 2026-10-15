@@ -6,6 +6,7 @@ import { useAuth } from '@/lib/auth';
 import { usePopup } from '@/components/Popup';
 import { AlertBanner } from '@/components/AlertBanner';
 import { Logo } from '@/components/Logo';
+import { DemoDateDialog } from '@/components/DemoDateDialog';
 import { IconBell, IconChevGray, IconPlusWhite } from '@/components/Icons';
 import { MSG } from '@/lib/messages';
 import { MAX_ACTIVE_TRIPS, ddayLabel, isActiveTrip, isPastTrip, progress, tripAlertCounts } from '@/lib/logic';
@@ -18,6 +19,7 @@ export default function Home() {
   const popup = usePopup();
   const router = useRouter();
   const [pastOpen, setPastOpen] = useState(false);
+  const [dateOpen, setDateOpen] = useState(false);
   const { today } = store;
   const active = store.trips.filter((t) => isActiveTrip(t, today));
   const past = store.trips.filter((t) => isPastTrip(t, today));
@@ -98,9 +100,16 @@ export default function Home() {
     <>
       <div className="topbar">
         <Logo width={76} />
-        <button className="btn btn-sm btn-secondary" style={{ height: 34 }} onClick={() => router.push('/settings/alerts')}>
-          <IconBell />알림 설정
-        </button>
+        <div style={{ display: 'flex', gap: 6 }}>
+          {auth.mode === 'demo' && (
+            <button className="btn btn-sm btn-secondary" style={{ height: 34 }} onClick={() => setDateOpen(true)} data-testid="date-test">
+              날짜설정(Test)
+            </button>
+          )}
+          <button className="btn btn-sm btn-secondary" style={{ height: 34 }} onClick={() => router.push('/settings/alerts')}>
+            <IconBell />알림 설정
+          </button>
+        </div>
       </div>
       <div className="page" style={{ paddingTop: 4 }}>
         <AlertBanner />
@@ -109,6 +118,7 @@ export default function Home() {
         <button className="btn btn-primary btn-full" onClick={newTrip} data-testid="new-trip"><IconPlusWhite />새 여행 만들기</button>
         {pastOpen && past.length > 0 && <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>{past.map((t) => card(t, true))}</div>}
       </div>
+      {dateOpen && auth.mode === 'demo' && <DemoDateDialog onClose={() => setDateOpen(false)} />}
       <div className="home-foot">
         <button className="link-btn" onClick={() => setPastOpen((v) => !v)} aria-expanded={pastOpen}>
           지난 여행 {past.length}개<IconChevGray open={pastOpen} />

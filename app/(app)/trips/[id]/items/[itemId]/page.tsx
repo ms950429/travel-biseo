@@ -84,6 +84,7 @@ export default function ItemDetail() {
           <label className="lab" htmlFor="i-due">기한</label>
           <input id="i-due" type="date" className={'inp' + (!dueOk && due ? ' err' : '')} value={due} max={trip.startDate} disabled={readOnly} onChange={(e) => setDue(e.target.value)} />
           {!dueOk && due ? <div className="err-t" role="alert">기한은 출발일까지 선택할 수 있어요.</div> : null}
+          {item.offsetDays != null && <div className="hint" data-testid="timing-hint">{MSG.timingHint}</div>}
         </div>
         {!readOnly && (
           <div style={{ display: 'flex', gap: 10, marginTop: 'auto' }}>
